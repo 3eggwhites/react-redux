@@ -30,7 +30,15 @@
   id: 0;
 }
 
-function createStore() {
+// a reducer function
+const todos = (state = [], action) => {
+  if (action.type === 'ADD_TODO') {
+    return state.concat(action.todo);
+  }
+  return state;
+};
+
+function createStore(reducer) {
 // The store should have 4 parts
 // 4. Update state
 
@@ -50,8 +58,18 @@ let state;
     };
   };
 
+  // 4. Update the state
+  const dispatch = (action) => {
+    // updating the state
+    state = reducer(state, action);
+
+    // invoking all listners function
+    listners.forEach((listner) => listner());
+  };
+
   return {
     getState,
     subscribe,
+    dispatch,
   };
 };
