@@ -1,22 +1,9 @@
-{
-  type: 'ADD_GOAL';
-  goal: {
-    id: 0;
-    label: 'RUN A MARATHON';
-  };
-}
-
-{
-  type: 'REMOVE_GOAL';
-  id: 0;
-}
-
-// a reducer function
+// todos reducer function
 const todos = (state = [], action) => {
 
   switch(action.type) {
     case 'ADD_TODO':
-      return state.concat(action.todo);
+      return state.concat([action.todo]);
     case 'REMOVE_TODO':
       return state.filter((todo) => todo.id !== action.id);
     case 'TOGGLE_TODO':
@@ -29,7 +16,27 @@ const todos = (state = [], action) => {
   }
 };
 
-function createStore() {
+// goals reducer function
+const goals = (state = [], action) => {
+  switch(action.type) {
+    case 'ADD_GOAL':
+      return state.concat([action.goal]);
+    case 'REMOVE_GOAL':
+      return state.filter((goal) => goal.id !== action.id);
+    default:
+      return state;
+  }
+};
+
+// root reducer
+const app = (state = {}, action) => {
+  return {
+    todo: todos(state.todo, action),
+    goal: goals(state.goal, action),
+  }
+};
+
+const createStore = (reducer) => {
 // The store should have 4 parts
 // 4. Update state
 
@@ -52,7 +59,7 @@ let state;
   // 4. Update the state
   const dispatch = (action) => {
     // updating the state
-    state = todos(state, action);
+    state = reducer(state, action);
 
     // invoking all listners function
     listners.forEach((listner) => listner());
@@ -64,3 +71,5 @@ let state;
     dispatch,
   };
 };
+
+const store = createStore(app)
