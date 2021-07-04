@@ -1,7 +1,6 @@
 // State management library code
 const createStore = (reducer) => {
   // The store should have 4 parts
-  // 4. Update state
   
   // 1. The state  
   let state;
@@ -43,6 +42,42 @@ const TOGGLE_TODO = 'TOGGLE_TODO';
 const ADD_GOAL = 'ADD_GOAL';
 const REMOVE_GOAL = 'REMOVE_GOAL';
 
+// action creators
+const addTodoAction = (todo) => {
+  return {
+    type: ADD_TODO,
+    todo,
+  }
+};
+
+const removeTodoAction = (id) => {
+  return {
+    type: REMOVE_TODO,
+    id,
+  }
+};
+
+const toggleTodoAction = (id) => {
+  return {
+    type: TOGGLE_TODO,
+    id,
+  }
+};
+
+const addGoalAction = (goal) => {
+  return {
+    type: ADD_GOAL,
+    goal,
+  }
+};
+
+const removeGoalAction = (id) => {
+  return {
+    type: REMOVE_GOAL,
+    id,
+  }
+};
+
 // todos reducer function
 const todos = (state = [], action) => {
 
@@ -80,3 +115,44 @@ const app = (state = {}, action) => {
     goal: goals(state.goal, action),
   }
 };
+
+
+const store = createStore(app)
+
+store.subscribe(() => {
+  console.log('The new state is: ', store.getState())
+})
+
+store.dispatch(addTodoAction({
+  id: 0,
+  name: 'Walk the dog',
+  complete: false,
+}))
+
+store.dispatch(addTodoAction({
+  id: 1,
+  name: 'Wash the car',
+  complete: false,
+}))
+
+store.dispatch(addTodoAction({
+  id: 2,
+  name: 'Go to the gym',
+  complete: true,
+}))
+
+store.dispatch(removeTodoAction(1))
+
+store.dispatch(toggleTodoAction(0))
+
+store.dispatch(addGoalAction({
+  id: 0,
+  name: 'Learn Redux'
+}))
+
+store.dispatch(addGoalAction({
+  id: 1,
+  name: 'Lose 20 pounds'
+}))
+
+store.dispatch(removeGoalAction(0))
