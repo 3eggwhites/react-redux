@@ -4,35 +4,35 @@ const createStore = (reducer) => {
   
   // 1. The state  
   let state;
-    let listners = [];
+  let listners = [];
   
-    // 2. Get the state
-    const getState = () => state;
-  
-    // 3. Listen to change in state
-    const subscribe = (listner) => {
-      listners.push(listner);
-      // returning an unsubscribe method which will remove the callback function from the listners array
-      return () => {
-        listners = listners.filter((l) => l !== listner );
-      };
-    };
-  
-    // 4. Update the state
-    const dispatch = (action) => {
-      // updating the state
-      state = reducer(state, action);
-  
-      // invoking all listners function
-      listners.forEach((listner) => listner());
-    };
-  
-    return {
-      getState,
-      subscribe,
-      dispatch,
+  // 2. Get the state
+  const getState = () => state;
+
+  // 3. Listen to change in state
+  const subscribe = (listner) => {
+    listners.push(listner);
+    // returning an unsubscribe method which will remove the callback function from the listners array
+    return () => {
+      listners = listners.filter((l) => l !== listner );
     };
   };
+
+  // 4. Update the state
+  const dispatch = (action) => {
+    // updating the state
+    state = reducer(state, action);
+
+    // invoking all listners function
+    listners.forEach((listner) => listner());
+  };
+
+  return {
+    getState,
+    subscribe,
+    dispatch,
+  };
+};
 
 // App code
 const ADD_TODO = 'ADD_TODO';
